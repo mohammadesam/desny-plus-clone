@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-function Header() {
+function Header(props) {
   return (
     <Nav>
       <Logo src="/Disney+_logo.svg" />
@@ -49,7 +49,7 @@ const Nav = styled.nav`
   color: white;
   display: flex;
   align-items: center;
-  padding: 0 5px; ;
+  padding: 0 5px;
 `;
 
 const Logo = styled.img`
@@ -62,6 +62,10 @@ const NavMenu = styled.div`
   display: flex;
   flex: 1;
   justify-content: center;
+
+  @media screen and (max-width: 950px) {
+    display: none;
+  }
 `;
 
 const NavLink = styled.a`
