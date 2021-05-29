@@ -40,7 +40,6 @@ const settings = {
 
 const Carousel = styled(Slider)`
   margin: 25px 0;
-
   ul li.slick-active {
     button::before {
       color: white;

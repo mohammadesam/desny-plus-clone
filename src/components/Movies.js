@@ -1,27 +1,24 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
-
+import { selectMovies } from "../features/movie/movieSlice";
+import { useSelector } from "react-redux";
 function Movies() {
+  const movies = useSelector(selectMovies);
   return (
     <Container>
       <h4> Recommended For You </h4>
-      <Originals>
-        <MovieCard>
-          <img src="/images/slider-scales.jpg" alt="" />
-        </MovieCard>
-
-        <MovieCard>
-          <img src="/images/slider-scales.jpg" alt="" />
-        </MovieCard>
-
-        <MovieCard>
-          <img src="/images/slider-scales.jpg" alt="" />
-        </MovieCard>
-
-        <MovieCard>
-          <img src="/images/slider-scales.jpg" alt="" />
-        </MovieCard>
-      </Originals>
+      <MoviesContainer>
+        {movies.map((movie, index) => {
+          return (
+            <MovieCard key={index}>
+              <Link to={`details/${movie.id}`}>
+                <img src={movie.cardImg} alt="" />
+              </Link>
+            </MovieCard>
+          );
+        })}
+      </MoviesContainer>
     </Container>
   );
 }
@@ -32,19 +29,25 @@ const Container = styled.div`
   margin: 0px 0px 30px;
   display: flex;
   flex-direction: column;
+  max-width: 98vw;
 `;
-const Originals = styled.div`
+const MoviesContainer = styled.div`
   padding: 20px 0px;
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  grid-gap: 20px;
-
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   @media screen and (max-width: 800px) {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    // grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 `;
 const MovieCard = styled.div`
+  position: relative;
+  min-width: 150px;
+  max-width: 220px;
+  min-height: 115px;
+  max-height: 115px;
   display: flex;
+  margin: 10px 5px;
   justify-content: center;
   align-items: center;
   border: solid rgba(249, 249, 249, 0.4) 2px;
@@ -56,7 +59,6 @@ const MovieCard = styled.div`
 
   img {
     width: 100%;
-    min-height: 130px;
     height: 100%;
     object-fit: cover;
   }
@@ -64,5 +66,9 @@ const MovieCard = styled.div`
   &:hover {
     border: solid white 1px;
     transform: scale(1.05);
+  }
+
+  @media screen and (max-width: 550px) {
+    width: 150px;
   }
 `;

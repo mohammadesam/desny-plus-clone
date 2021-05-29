@@ -1,20 +1,36 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-
+import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { selectMovies } from "../features/movie/movieSlice";
+import db from "../firebase";
 const Warper = styled.div`
   display: flex;
   flex-direction: column;
 `;
 
 function Details() {
+  const movieId = useParams().id;
+  const [movie, setMovie] = useState({});
+  useEffect(() => {
+    db.collection("movies")
+      .doc(movieId)
+      .get()
+      .then((result) => {
+        if (result.exists) {
+          setMovie(result.data());
+        }
+      });
+  }, []);
+
   return (
     <Container>
       <Background>
-        <img src="/images/slider-scale.jpg" alt="" />
+        <img src={movie.backgroundImg} alt="" />
       </Background>
       <Warper>
         <Title>
-          <img src="/images/viewers-pixar.png" alt="" />
+          <img src={movie.titleImg} alt="" />
         </Title>
         <ToolBar>
           <BigButton>
@@ -35,16 +51,8 @@ function Details() {
           </GroupButton>
         </ToolBar>
 
-        <SubTitle>
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nostrum,
-          dolorum.
-        </SubTitle>
-        <Description>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum
-          voluptatibus at deserunt. Perspiciatis voluptatibus ipsum quod, veniam
-          eligendi cupiditate dolorem reprehenderit adipisci nam voluptate eum
-          molestias animi! Tenetur in placeat rerum odit nesciunt quis itaque.
-        </Description>
+        <SubTitle> {movie.subTitle} </SubTitle>
+        <Description> {movie.description} </Description>
       </Warper>
     </Container>
   );
@@ -75,12 +83,11 @@ const Background = styled.div`
 `;
 
 const Title = styled.div`
-  width: 180px;
-  height: 150px;
+  width: 260px;
+  height: 160px;
   img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
   }
 `;
 
@@ -166,4 +173,5 @@ const SubTitle = styled.p`
 const Description = styled.p`
   margin: 15px 0;
   color: rgb(249, 249, 249);
+  max-width: 700px;
 `;
